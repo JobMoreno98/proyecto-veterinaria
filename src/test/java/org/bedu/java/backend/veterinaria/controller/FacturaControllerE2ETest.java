@@ -15,22 +15,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Date;
 
+import org.bedu.java.backend.veterinaria.dto.ErrorDTO;
 import org.bedu.java.backend.veterinaria.dto.factura.FacturaDTO;
 import org.bedu.java.backend.veterinaria.model.Factura;
 import org.bedu.java.backend.veterinaria.model.Propietario;
 import org.bedu.java.backend.veterinaria.repository.FacturaRepository;
 import org.bedu.java.backend.veterinaria.repository.PropietarioRepository;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -50,9 +50,10 @@ class FacturaControllerE2ETest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @AfterEach
+    @BeforeEach
     public void setup() {
         repository.deleteAll();
+        propietarioRepository.deleteAll();
     }
 
     @Test
@@ -107,11 +108,11 @@ class FacturaControllerE2ETest {
                 .perform(post("/facturas").contentType("application/json").content("{\"rfcCliente\":\"qwerty\"}"))
                 .andExpect(status().isBadRequest())
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
 
-        String resultContent = "{\"code\":\"ERR_VALID\",\"message\":\"Hubo un error al procesar los datos de entrada";
-
-        assertThat(content, containsString(resultContent));
+        String content = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        ErrorDTO response = mapper.readValue(content, ErrorDTO.class);
+        assertEquals("ERR_VALID", response.getCode());
+        assertEquals("Hubo un error al procesar los datos de entrada", response.getMessage());
     }
 
     @Test
@@ -120,23 +121,31 @@ class FacturaControllerE2ETest {
 
         Propietario propietario = new Propietario();
         propietario.setId(1L);
-        propietario.setApellidoMaterno("Moreno");
-        propietario.setApellidoPaterno("Martinez");
-        propietario.setCelular("3333333");
-        propietario.setCorreo("a@a.com");
-        propietario.setDireccion("Paseo");
-        propietario.setFechaNacimiento(Date.valueOf("2023-12-12"));
-        propietario.setNombre("Job");
-        propietario.setOcupacion("Empleado");
+        
+        Factura factura = new Factura();
+        factura.setId(1L);
+        factura.setFechaEmision(Date.valueOf("2023-12-10"));
+        factura.setIva(240F);
+        factura.setPropietario(propietario);
+        factura.setRazonSocial("Razón Social del Cliente2");
+        factura.setRfcCliente("RFC del Clien");
+        factura.setSubtotal(1500.0F);
+        factura.setTotal(0);
 
-        Propietario dto = propietarioRepository.save(propietario);
-
-        String content = "{\"fechaEmision\":\"2023-12-12\",\"subtotal\": 1500.0,\"iva\": 0.16,\"rfcCliente\": \"RFC del Clien\",\"razonSocial\": \"Razón Social del Cliente2\",\"propietario\": { \"id\":1}}";
+        String contentido = "{\"fechaEmision\":\""+ Date.valueOf("2023-12-12") +"\",\"subtotal\": 1500.0,\"iva\": 0.16,\"rfcCliente\": \"RFC del Clien\",\"razonSocial\": \"Razón Social del Cliente2\",\"propietario\": { \"id\":1}}";
 
         MvcResult result = mockMvc.perform(post("/facturas").contentType("application/json")
-                .content(content))
+                .content(contentido))
                 .andExpect(status().isCreated())
                 .andReturn();
+
+        String content = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        // Creamos una referencia del tipo al que se va a convertir el JSON
+        Factura response = mapper.readValue(content, Factura.class);
+
+        assertNotNull(result);
+        assertEquals(response.getId(), factura.getId() );
+        assertEquals(response.getPropietario().getId(), factura.getPropietario().getId());
     }
 
 }

@@ -1,6 +1,4 @@
 package org.bedu.java.backend.veterinaria.service;
-
-import org.bedu.java.backend.veterinaria.dto.factura.AddMedicamentoDTO;
 import org.bedu.java.backend.veterinaria.dto.medicamento.MedicamentoDTO;
 import org.bedu.java.backend.veterinaria.exception.MedicamentoNotFoundException;
 import org.bedu.java.backend.veterinaria.mapper.FacturaMedicamentoMapper;
@@ -30,6 +28,7 @@ public class FacturaMedicamentoService {
 
     }
 
+    @SuppressWarnings("null")
     public void addMedicamento(Long facturaId, Long medicamentoId, int cantidad) throws MedicamentoNotFoundException {
 
         Optional<MedicamentoDTO> dto = serviceMService.findById(medicamentoId);
@@ -38,6 +37,7 @@ public class FacturaMedicamentoService {
         }
 
         MedicamentoDTO medicamento = dto.get();
+        
         repository.save(mapper.toModel(facturaId, medicamentoId, medicamento.getPrecio(), cantidad));
     }
 

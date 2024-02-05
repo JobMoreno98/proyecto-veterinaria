@@ -9,9 +9,8 @@ import org.bedu.java.backend.veterinaria.mapper.FacturaMapper;
 import org.bedu.java.backend.veterinaria.model.Factura;
 import org.bedu.java.backend.veterinaria.repository.FacturaRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -19,7 +18,7 @@ public class FacturaService {
     private FacturaRepository repository;
     private FacturaMapper mapper;
 
-    public FacturaService(FacturaRepository repository, FacturaMapper mapper){
+    public FacturaService(FacturaRepository repository, FacturaMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -39,7 +38,6 @@ public class FacturaService {
         temp.setTotal(temp.getIva() + data.getSubtotal());
 
         Factura entity = repository.save(temp);
-
         return mapper.toDTO(entity);
     }
 

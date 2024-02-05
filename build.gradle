@@ -59,8 +59,8 @@ jacocoTestReport{
 								exclude: [
 									'org/bedu/java/backend/veterinaria/dto/**',
 									'org/bedu/java/backend/veterinaria/model/**',
-									'org/bedu/java/backend/veterinaria/mapper/**',
-									'org/bedu/java/backend/veterinaria/Application.class'
+									'org/bedu/java/backend/veterinaria/mapper/**'
+									//'org/bedu/java/backend/veterinaria/Application.class'
 								]
 						)
 			}))
@@ -69,10 +69,10 @@ jacocoTestReport{
 test {
 	jacoco {
 		excludes = [
-			'org.bedu.java.backend.veterinariadto.*',
-			'org.bedu.java.backend.veterinariamodel.*',
-			'oorg.bedu.java.backend.veterinariamapper.*',
-			'org.bedu.java.backend.veterinariaApplication.class'
+			'org.bedu.java.backend.veterinaria.dto.*',
+			'org.bedu.java.backend.veterinaria.model.*',
+			'oorg.bedu.java.backend.veterinaria.mapper.*'
+			//'org.bedu.java.backend.veterinaria.Application.class'
 		]
 	}
 }
