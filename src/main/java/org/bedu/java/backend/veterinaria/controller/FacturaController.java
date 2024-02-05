@@ -9,9 +9,9 @@ import org.bedu.java.backend.veterinaria.dto.factura.FacturaDTO;
 import org.bedu.java.backend.veterinaria.dto.factura.UpdateFacturaDTO;
 import org.bedu.java.backend.veterinaria.dto.medicamento.MedicamentoDTO;
 import org.bedu.java.backend.veterinaria.exception.FacturaNotFoundException;
+import org.bedu.java.backend.veterinaria.exception.MedicamentoNotFoundException;
 import org.bedu.java.backend.veterinaria.service.FacturaMedicamentoService;
 import org.bedu.java.backend.veterinaria.service.FacturaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +22,14 @@ import java.util.List;
 @RequestMapping("/facturas")
 public class FacturaController {
 
-    @Autowired
     private FacturaService service;
 
-    @Autowired
     private FacturaMedicamentoService facturaMedicamentoService;
+
+    public FacturaController(FacturaService service, FacturaMedicamentoService facturaMedicamentoService){
+        this.service = service;
+        this.facturaMedicamentoService = facturaMedicamentoService;
+    }
 
     @Operation(summary = "Obtiene la lista de todas las facturas")
     @GetMapping
@@ -63,16 +66,14 @@ public class FacturaController {
     @PostMapping("{facturaId}/medicamentos")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addMedicamento(@PathVariable Long facturaId,
-            @RequestBody AddMedicamentoDTO data) {
-        facturaMedicamentoService.addMedicamento(facturaId, data.getMedicamentoId(), data.getPrecio(),
-                data.getCantidad());
+            @RequestBody AddMedicamentoDTO data) throws MedicamentoNotFoundException {
+        facturaMedicamentoService.addMedicamento(facturaId, data.getMedicamentoId(), data.getCantidad());
     }
 
-    @Operation(summary = "Obtiene los medicamentos de una factura determinada")
+    @Operation(summary = "Obtiene la informción de los medicamentos de una factura determinada")
     @GetMapping("{facturaId}/medicamentos")
     @ResponseStatus(HttpStatus.OK)
     public List<MedicamentoDTO> findMedicamentos(@PathVariable Long facturaId) {
         return facturaMedicamentoService.findMedicamentosByFactura(facturaId);
     }
-
 }

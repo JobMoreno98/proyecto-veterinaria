@@ -8,7 +8,6 @@ import org.bedu.java.backend.veterinaria.exception.FacturaNotFoundException;
 import org.bedu.java.backend.veterinaria.mapper.FacturaMapper;
 import org.bedu.java.backend.veterinaria.model.Factura;
 import org.bedu.java.backend.veterinaria.repository.FacturaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +16,19 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class FacturaService {
-
-    @Autowired
     private FacturaRepository repository;
-
-    @Autowired
     private FacturaMapper mapper;
+
+    public FacturaService(FacturaRepository repository, FacturaMapper mapper){
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     public List<FacturaDTO> findAll() {
         return mapper.toDTO(repository.findAll());
     }
 
+    @SuppressWarnings("null")
     public Optional<FacturaDTO> findById(Long id) {
         return repository.findById(id).map(mapper::toDTO);
     }
@@ -64,7 +65,6 @@ public class FacturaService {
     }
 
     public void deleteById(Long id) throws FacturaNotFoundException {
-
         Optional<Factura> result = repository.findById(id);
 
         if (!result.isPresent()) {

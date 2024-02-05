@@ -29,7 +29,6 @@ public class CreateFacturaDTO {
     private float iva;
 
     @Schema(description = "Total de la factura", example = "143.26")
-    @DecimalMin(value = "0.1", message = "El total debe ser mayor a cero")
     private float total;
 
     @Schema(description = "RFC del cliente", example = "HBO8912228A9")

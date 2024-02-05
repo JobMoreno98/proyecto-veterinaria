@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id "org.sonarqube" version "4.4.1.3373"
+	id "jacoco"
 }
 
 group = 'org.bedu.java.backend'
@@ -24,7 +26,6 @@ repositories {
 dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
-
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
@@ -32,17 +33,46 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-	// runtimeOnly 'com.h2database:h2'
-	// implementation 'org.xerial:sqlite-jdbc:3.45.0.0'
+	
+	implementation 'org.xerial:sqlite-jdbc:3.45.0.0'
 	// runtimeOnly 'com.mysql:mysql-connector-j'
-	implementation 'com.mysql:mysql-connector-j:8.3.0'
+	//implementation 'com.mysql:mysql-connector-j:8.3.0'
 	implementation 'org.hibernate.orm:hibernate-community-dialects:6.4.2.Final'
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport{
+	reports{
+		xml.required=true
+		}
+		afterEvaluate {
+			classDirectories.setFrom(files(classDirectories.files.collect {
+						fileTree(dir: it,
+								exclude: [
+									'org/bedu/java/backend/veterinaria/dto/**',
+									'org/bedu/java/backend/veterinaria/model/**',
+									'org/bedu/java/backend/veterinaria/mapper/**',
+									'org/bedu/java/backend/veterinaria/Application.class'
+								]
+						)
+			}))
+		}
+}
+test {
+	jacoco {
+		excludes = [
+			'org.bedu.java.backend.veterinariadto.*',
+			'org.bedu.java.backend.veterinariamodel.*',
+			'oorg.bedu.java.backend.veterinariamapper.*',
+			'org.bedu.java.backend.veterinariaApplication.class'
+		]
+	}
 }

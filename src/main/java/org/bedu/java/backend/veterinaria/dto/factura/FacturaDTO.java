@@ -3,6 +3,7 @@ package org.bedu.java.backend.veterinaria.dto.factura;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import org.bedu.java.backend.veterinaria.model.Propietario;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class FacturaDTO {
 
     @Schema(description = "Identificador de la factura", example = "11093")

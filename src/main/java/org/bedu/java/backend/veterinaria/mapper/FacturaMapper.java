@@ -4,7 +4,11 @@ import org.bedu.java.backend.veterinaria.dto.factura.CreateFacturaDTO;
 import org.bedu.java.backend.veterinaria.dto.factura.FacturaDTO;
 import org.bedu.java.backend.veterinaria.dto.factura.UpdateFacturaDTO;
 import org.bedu.java.backend.veterinaria.model.Factura;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
