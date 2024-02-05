@@ -51,7 +51,7 @@ class FacturaControllerTest {
     }
 
     @Test
-    @DisplayName("Controller should return a list of facutas")
+    @DisplayName("Controller regresa una lista de facturas")
     void findAllTest(){
         List<FacturaDTO> data = new LinkedList<>();
         Date fecha = Date.valueOf("2023-12-12");
@@ -77,7 +77,7 @@ class FacturaControllerTest {
     }
 
     @Test
-    @DisplayName("Controller sould be save a factura")
+    @DisplayName("Controller guarda una factura")
     void saveFactura(){
         CreateFacturaDTO dto = new CreateFacturaDTO();
         Date fecha = Date.valueOf("2023-12-12");
@@ -102,7 +102,7 @@ class FacturaControllerTest {
          
     }
     @Test
-    @DisplayName("Controller should update a factura")
+    @DisplayName("Controller actualiza una factura")
     void updateTest() throws FacturaNotFoundException {
         UpdateFacturaDTO dto = new UpdateFacturaDTO();
         dto.setRazonSocial("qwerty");
@@ -112,7 +112,7 @@ class FacturaControllerTest {
         verify(service,times(1)).update(400L, dto);
     }
     @Test
-    @DisplayName("Controller should delete a factura")
+    @DisplayName("Controller elimina una factura")
     void deleteTest() throws FacturaNotFoundException{
         controller.delete(400L);
         verify(service,times(1)).deleteById(400L);

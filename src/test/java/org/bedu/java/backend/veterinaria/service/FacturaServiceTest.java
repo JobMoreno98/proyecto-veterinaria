@@ -40,7 +40,7 @@ class FacturaServiceTest {
     private FacturaService service;
 
     @Test
-    @DisplayName("Service should b einjected")
+    @DisplayName("Service should be injected")
     void smokeTest() {
         assertNotNull(service);
     }
@@ -51,7 +51,7 @@ class FacturaServiceTest {
     }
 
     @Test
-    @DisplayName("FindById")
+    @DisplayName("Busqueda de una factura por Id")
     void findByIdTest() {
 
         Factura factura = new Factura();
@@ -84,7 +84,7 @@ class FacturaServiceTest {
     }
 
     @Test
-    @DisplayName("Service should return list")
+    @DisplayName("Service regresa una lista de facturas")
     void findAllTest() {
 
         List<Factura> data = new LinkedList<>();
@@ -120,9 +120,8 @@ class FacturaServiceTest {
 
     }
 
-    @SuppressWarnings("null")
     @Test
-    @DisplayName("Services should save a factura")
+    @DisplayName("Services guarda una factura")
     void saveTest() {
         Date fecha = Date.valueOf("2023-12-12");
         CreateFacturaDTO dto = new CreateFacturaDTO();
@@ -161,7 +160,7 @@ class FacturaServiceTest {
     }
 
     @Test
-    @DisplayName("Service should throw an error if factura not found")
+    @DisplayName("Service intenta actualizar pero manda error por factura no encontrada")
     void updateWithErrorTest() {
         Optional<Factura> empty = Optional.empty();
 
@@ -174,7 +173,7 @@ class FacturaServiceTest {
     }
 
     @Test
-    @DisplayName("Service should update factura")
+    @DisplayName("Service actualiza una factura")
     void updateTest() throws FacturaNotFoundException {
 
         UpdateFacturaDTO data = new UpdateFacturaDTO();
@@ -198,14 +197,14 @@ class FacturaServiceTest {
     }
 
     @Test
-    @DisplayName("Service should delete a factura by id with error")
+    @DisplayName("Service intenta eliminar una factura pero marca error por no encontrarla")
     void deleteWithErrorTest() throws FacturaNotFoundException {
         assertThrows(FacturaNotFoundException.class, () -> service.deleteById(1L));
 
     }
 
     @Test
-    @DisplayName("Service should delete a factura by id")
+    @DisplayName("Service elimina una factura por Id")
     void deleteTest() throws FacturaNotFoundException {
         Factura factura = new Factura();
         factura.setId(1L);

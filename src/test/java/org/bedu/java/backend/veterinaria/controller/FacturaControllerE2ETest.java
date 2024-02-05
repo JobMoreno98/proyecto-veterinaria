@@ -1,5 +1,6 @@
 package org.bedu.java.backend.veterinaria.controller;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,13 +50,13 @@ class FacturaControllerE2ETest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @BeforeEach
+    @AfterEach
     public void setup() {
         repository.deleteAll();
     }
 
     @Test
-    @DisplayName("GET /facturas should return a empty list")
+    @DisplayName("GET /facturas regresa una lista vacia ")
     void emptyListTest() throws Exception {
         // Realiza una peticion de tipo GET /facturas
         MvcResult result = mockMvc.perform(get("/facturas")).andExpect(status().isOk()).andReturn();
@@ -66,7 +67,7 @@ class FacturaControllerE2ETest {
     }
 
     @Test
-    @DisplayName("GET /facturas should return list of facturas")
+    @DisplayName("GET /facturas retorna una lista de facturas")
     void findAll() throws Exception {
         Factura factura = new Factura();
         Date fecha = Date.valueOf("2023-12-12");
@@ -100,7 +101,7 @@ class FacturaControllerE2ETest {
     }
 
     @Test
-    @DisplayName("POST /facturas")
+    @DisplayName("POST /facturas registro de una factura con algun parametro faltante ")
     void postMissingParameterRequestBodyTest() throws Exception {
         MvcResult result = mockMvc
                 .perform(post("/facturas").contentType("application/json").content("{\"rfcCliente\":\"qwerty\"}"))
@@ -114,7 +115,7 @@ class FacturaControllerE2ETest {
     }
 
     @Test
-    @DisplayName("POST  /facturas")
+    @DisplayName("POST  /facturas registro de una factura de manera exitosa")
     void postTest() throws Exception {
 
         Propietario propietario = new Propietario();
